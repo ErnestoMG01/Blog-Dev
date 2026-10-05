@@ -25,15 +25,18 @@ const Skyline = () => (
   <img className="skyline" src="/assets/90333.svg" alt="" aria-hidden="true" />
 );
 
+import fotoRetrato from './assets/2f3c7.jpeg';
+import ilustracionOutline from './assets/17ead.svg';
+
 const Portrait = () => (
   <div className="portrait-wrap" aria-label="Retrato personal integrado en la ilustración">
     <div className="portrait-sun" />
     <div className="portrait-cutout">
-      <img src="/assets/2f3c7.jpeg" alt="Retrato de Ernesto Montes" />
+      <img src={fotoRetrato} alt="Retrato de Ernesto Montes" />
       <span className="portrait-halftone" aria-hidden="true" />
       <span className="photo-label">CREANDO<br />EN PROCESO</span>
     </div>
-    <img className="portrait-outline" src="/assets/17ead.svg" alt="" aria-hidden="true" />
+    <img className="portrait-outline" src={ilustracionOutline} alt="" aria-hidden="true" />
   </div>
 );
 
