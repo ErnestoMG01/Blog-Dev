@@ -1,0 +1,10 @@
+{
+  "description": "Immerse yourself in a visually stunning developer blog and portfolio that combines playful illustrations and dynamic storytelling to showcase skills and projects.",
+  "robots": {
+    "index": false
+  },
+  "accessibility": {
+    "addBypassLinks": false,
+    "ignoreReducedMotion": false
+  }
+}
