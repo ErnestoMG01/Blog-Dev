@@ -1,4 +1,5 @@
 import { FormEvent, useEffect, useRef, useState } from "react";
+const asset = (name: string) => `${import.meta.env.BASE_URL}assets/${name}`;
 
 type LinkProps = {
   href: string;
@@ -7,11 +8,11 @@ type LinkProps = {
 };
 
 const Arrow = ({ className = "" }: { className?: string }) => (
-  <img className={className} src="/assets/6bcaa.svg" alt="" aria-hidden="true" />
+  <img className={className} src={asset("6bcaa.svg")} alt="" aria-hidden="true" />
 );
 
 const Scribble = ({ className = "" }: { className?: string }) => (
-  <img className={className} src="/assets/64439.svg" alt="" aria-hidden="true" />
+  <img className={className} src={asset("64439.svg")} alt="" aria-hidden="true" />
 );
 
 const TextLink = ({ href, children, className = "" }: LinkProps) => (
@@ -22,18 +23,18 @@ const TextLink = ({ href, children, className = "" }: LinkProps) => (
 );
 
 const Skyline = () => (
-  <img className="skyline" src="/assets/90333.svg" alt="" aria-hidden="true" />
+  <img className="skyline" src={asset("90333.svg")} alt="" aria-hidden="true" />
 );
 
 const Portrait = () => (
   <div className="portrait-wrap" aria-label="Retrato personal integrado en la ilustración">
     <div className="portrait-sun" />
     <div className="portrait-cutout">
-      <img src="/assets/2f3c7.jpeg" alt="Retrato de Ernesto Montes" />
+      <img src={asset("2f3c7.jpeg")} alt="Retrato de Ernesto Montes" />
       <span className="portrait-halftone" aria-hidden="true" />
       <span className="photo-label">CREANDO<br />EN PROCESO</span>
     </div>
-    <img className="portrait-outline" src="/assets/17ead.svg" alt="" aria-hidden="true" />
+    <img className="portrait-outline" src={asset("17ead.svg")} alt="" aria-hidden="true" />
   </div>
 );
 
@@ -114,7 +115,7 @@ const About = () => (
           <div className={`fact fact-${index + 1}`} key={label}>
             <span>{label}</span>
             <strong>{value}</strong>
-            <img src={index === 0 ? "/assets/06530.svg" : "/assets/88e19.svg"} alt="" aria-hidden="true" />
+            <img src={index === 0 ? asset("06530.svg") : asset("88e19.svg")} alt="" aria-hidden="true" />
           </div>
         ))}
       </div>
@@ -316,7 +317,7 @@ const Contact = () => {
           <span>Mensaje</span>
           <textarea name="message" placeholder="Cuéntame qué tienes en mente..." rows={4} required />
         </label>
-        <button type="submit"><span>Enviar mensaje</span><img src="/assets/e46c1.svg" alt="" aria-hidden="true" /></button>
+        <button type="submit"><span>Enviar mensaje</span><img src={asset("e46c1.svg")} alt="" aria-hidden="true" /></button>
       </form>
       <div className="contact-tower" aria-hidden="true">
         <span /><span /><span /><b>HOLA<br />MUNDO</b>
@@ -334,7 +335,7 @@ const Navigation = ({ open, setOpen }: { open: boolean; setOpen: (value: boolean
       <a href="#about" onClick={() => setOpen(false)}>Sobre mí</a>
       <a href="#lab" onClick={() => setOpen(false)}>Laboratorio</a>
     </nav>
-    <a className="nav-contact" href="#contact">Contacto <img src="/assets/5f3ae.svg" alt="" aria-hidden="true" /></a>
+    <a className="nav-contact" href="#contact">Contacto <img src={asset("5f3ae.svg")} alt="" aria-hidden="true" /></a>
     <button className="menu-toggle" onClick={() => setOpen(!open)} aria-expanded={open} aria-label="Abrir o cerrar navegación">
       <i /><i />
     </button>
