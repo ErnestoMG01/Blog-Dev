@@ -25,6 +25,8 @@ const Skyline = () => (
   <img className="skyline" src="/assets/90333.svg" alt="" aria-hidden="true" />
 );
 
+import fotoRetrato from './assets/2f3c7.jpeg';
+import ilustracionOutline from './assets/17ead.svg';
 
 const Portrait = () => (
   <div className="portrait-wrap" aria-label="Retrato personal integrado en la ilustración">
