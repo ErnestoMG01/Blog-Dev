@@ -1,0 +1,15 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="refresh" content="0; url=/Blog-Dev/?__route=" />
+    <script>
+      const prefix = "/Blog-Dev/";
+      const remainingPath = window.location.pathname.startsWith(prefix)
+        ? window.location.pathname.slice(prefix.length)
+        : window.location.pathname.replace(/^\//, "");
+      window.location.replace(`/Blog-Dev/?__route=${encodeURIComponent(remainingPath + window.location.search + window.location.hash)}`);
+    </script>
+  </head>
+  <body></body>
+</html>

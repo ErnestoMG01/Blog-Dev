@@ -9,6 +9,14 @@ vite.config.*.timestamp-*
 *-debug.log*
 logs/
 *.log
+
+# Backend generated files and local database
+__pycache__/
+*.py[cod]
+backend/*.db
+backend/*.sqlite
+backend/*.sqlite3
+backend/app/static/uploads/
 .claude-replay.*
 .tmp-*
 /.figma/design-context/
