@@ -1,37 +1,24 @@
-import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
-import LandingPage from "../modules/landing/pages/LandingPage";
-import BlogFeedPage from "../modules/blog/pages/BlogFeedPage";
-import BlogPostPage from "../modules/blog/pages/BlogPostPage";
-import DraftsListPage from "../modules/admin/pages/DraftsListPage";
-import PostsListPage from "../modules/admin/pages/PostsListPage";
-import DraftEditorPage from "../modules/admin/pages/DraftEditorPage";
-import AdminLoginPage from "../modules/admin/pages/AdminLoginPage";
-import ProtectedRoute from "./ProtectedRoute";
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import Blog from '../pages/Blog';
+import { DraftsListPage } from '../modules/admin/pages/DraftsListPage';
+import DraftEditorPage from '../modules/admin/pages/DraftEditorPage'; // Importación por defecto sin llaves
+import { PostsListPage } from '../modules/admin/pages/PostsListPage';
 
-export function AppRouter() {
-  const basename = window.location.pathname === "/Blog-Dev" || window.location.pathname.startsWith("/Blog-Dev/")
-    ? "/Blog-Dev"
-    : undefined;
+export const AppRouter = () => (
+  <BrowserRouter>
+    <Routes>
+      {/* Vista Pública */}
+      <Route element={<Blog />} path="/" />
+      
+      {/* Panel CMS Admin */}
+      <Route element={<Navigate replace to="/admin/drafts" />} path="/admin" />
+      <Route element={<DraftsListPage />} path="/admin/drafts" />
+      <Route element={<DraftEditorPage />} path="/admin/drafts/new" />
+      <Route element={<DraftEditorPage />} path="/admin/drafts/:id" />
+      <Route element={<PostsListPage />} path="/admin/posts" />
 
-  return (
-    <BrowserRouter basename={basename}>
-      <Routes>
-        <Route path="/" element={<LandingPage />} />
-        <Route path="/blog" element={<BlogFeedPage />} />
-        <Route path="/blog/:slug" element={<BlogPostPage />} />
-        <Route path="/admin/login" element={<AdminLoginPage />} />
-        <Route path="/admin" element={<ProtectedRoute />}>
-          <Route index element={<Navigate to="/admin/drafts" replace />} />
-          <Route path="drafts" element={<DraftsListPage />} />
-          <Route path="drafts/new" element={<DraftEditorPage />} />
-          <Route path="drafts/:id" element={<DraftEditorPage />} />
-          <Route path="drafts/:id/edit" element={<DraftEditorPage />} />
-          <Route path="posts" element={<PostsListPage />} />
-        </Route>
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
-    </BrowserRouter>
-  );
-}
-
-export default AppRouter;
+      {/* Catch-all */}
+      <Route element={<Navigate replace to="/" />} path="*" />
+    </Routes>
+  </BrowserRouter>
+);
