@@ -10,6 +10,16 @@ export function BlogPostPage() {
   const [post, setPost] = useState<Post | null>(null);
   const [error, setError] = useState("");
   useEffect(() => { if (slug) postsService.get(slug).then(setPost).catch((reason) => setError(reason instanceof Error ? reason.message : "No se pudo cargar la publicación")); }, [slug]);
+  useEffect(() => {
+    if (!post?.slug) return;
+    const storageKey = `viewed_post_${post.slug}`;
+    if (sessionStorage.getItem(storageKey)) return;
+    sessionStorage.setItem(storageKey, "true");
+    postsService.registerPostView(post.slug)
+      .catch(() => {
+        sessionStorage.removeItem(storageKey);
+      });
+  }, [post]);
   return (
     <main className="cms-page blog-page">
       {post && <SEO title={`${post.title} | Blog Dev`} description={post.excerpt} image={post.cover_image} type="article" />}

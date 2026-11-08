@@ -3,7 +3,7 @@ from pydantic import BaseModel, ConfigDict
 
 class ContentInput(BaseModel):
     title: str
-    slug: str
+    slug: str | None = None
     excerpt: str = ""
     content: str = ""
     cover_image: str | None = None

@@ -1,4 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, status
+import re
+import unicodedata
 from sqlalchemy.orm import Session
 from datetime import datetime, timezone
 from app.core.database import get_db
@@ -7,6 +9,25 @@ from app.schemas.content import ContentInput, ContentResponse, ContentRevisionRe
 from app.core.security import require_admin_api_key
 
 router = APIRouter()
+
+
+def create_slug(value: str) -> str:
+    normalized = unicodedata.normalize("NFKD", value).encode("ascii", "ignore").decode()
+    slug = re.sub(r"[^a-zA-Z0-9]+", "-", normalized.lower()).strip("-")
+    return slug or "post"
+
+
+def unique_slug(db: Session, base_slug: str, exclude_id: int | None = None) -> str:
+    slug = base_slug
+    suffix = 2
+    while True:
+        query = db.query(Content).filter(Content.slug == slug)
+        if exclude_id is not None:
+            query = query.filter(Content.id != exclude_id)
+        if not query.first():
+            return slug
+        slug = f"{base_slug}-{suffix}"
+        suffix += 1
 
 
 def snapshot(draft: Content, db: Session) -> None:
@@ -46,9 +67,10 @@ def list_drafts(db: Session = Depends(get_db)):
 
 @router.post("", response_model=ContentResponse, status_code=status.HTTP_201_CREATED, dependencies=[Depends(require_admin_api_key)])
 def create_draft(payload: ContentInput, db: Session = Depends(get_db)):
-    if db.query(Content).filter(Content.slug == payload.slug).first():
-        raise HTTPException(409, "El slug ya existe")
-    draft = Content(**payload.model_dump(), status="draft")
+    data = payload.model_dump()
+    base_slug = create_slug(payload.slug or payload.title)
+    data["slug"] = unique_slug(db, base_slug)
+    draft = Content(**data, status="draft")
     db.add(draft)
     db.commit()
     db.refresh(draft)
@@ -65,6 +87,8 @@ def update_draft(draft_id: int, payload: ContentUpdate, db: Session = Depends(ge
     draft = db.get(Content, draft_id)
     if not draft: raise HTTPException(404, "Borrador no encontrado")
     changes = payload.model_dump(exclude_unset=True)
+    if changes.get("slug") is not None:
+        changes["slug"] = unique_slug(db, create_slug(changes["slug"]), exclude_id=draft.id)
     if changes:
         snapshot(draft, db)
         for field, value in changes.items(): setattr(draft, field, value)

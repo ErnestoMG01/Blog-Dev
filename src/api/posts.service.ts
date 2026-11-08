@@ -5,7 +5,8 @@ export type Post = Draft;
 
 export const postsService = {
   list: () => apiClient<Post[]>("/posts"),
-  get: (idOrSlug: string | number) => apiClient<Post>(`/posts/${encodeURIComponent(idOrSlug)}`),
+  get: (slug: string) => apiClient<Post>(`/posts/${encodeURIComponent(slug)}`),
+  registerPostView: (slug: string) => apiClient<{ views: number }>(`/posts/${encodeURIComponent(slug)}/view`, { method: "POST" }),
   remove: (id: number) => apiClient<void>(`/posts/${id}`, { method: "DELETE" }),
   unpublish: (id: number) => apiClient<Post>(`/posts/${id}/unpublish`, { method: "POST" }),
 };

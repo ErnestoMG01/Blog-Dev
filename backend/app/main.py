@@ -15,11 +15,15 @@ from app.models.content import Content
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="Blog Dev CMS API", version="1.0.0")
+allowed_origins = settings.allowed_origins
+if settings.cors_origins:
+    allowed_origins = settings.cors_origins
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[origin.strip() for origin in settings.cors_origins.split(",") if origin.strip()],
+    allow_origins=[origin.strip() for origin in allowed_origins.split(",") if origin.strip()],
     allow_credentials=True,
-    allow_headers=["Content-Type", "X-Admin-API-Key"],
+    allow_headers=["Content-Type", "X-Admin-API-Key", "Authorization"],
     allow_methods=["GET", "POST", "PATCH", "DELETE", "OPTIONS"],
 )
 
