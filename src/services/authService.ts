@@ -1,5 +1,12 @@
-const API_URL = import.meta.env.VITE_API_URL ?? "http://localhost:8000/api/v1";
-const TOKEN_KEY = "cms_admin_access_token";
+const configuredBase = (
+  import.meta.env.VITE_API_BASE_URL ??
+  import.meta.env.VITE_API_URL ??
+  "http://localhost:8000/api/v1"
+).replace(/\/$/, "");
+const API_URL = /\/api\/v1$/i.test(configuredBase)
+  ? configuredBase
+  : `${configuredBase}/api/v1`;
+const TOKEN_KEY = "admin_token";
 
 export type LoginInput = {
   email?: string;
@@ -13,7 +20,7 @@ export type LoginResponse = {
 };
 
 export function getAccessToken(): string | null {
-  return sessionStorage.getItem(TOKEN_KEY);
+  return localStorage.getItem(TOKEN_KEY);
 }
 
 export function isAuthenticated(): boolean {
@@ -29,7 +36,7 @@ export function isAuthenticated(): boolean {
 }
 
 export function logout(): void {
-  sessionStorage.removeItem(TOKEN_KEY);
+  localStorage.removeItem(TOKEN_KEY);
   sessionStorage.removeItem("cms_admin_authenticated");
   sessionStorage.removeItem("cms_admin_api_key");
 }
@@ -54,6 +61,6 @@ export async function login(input: LoginInput): Promise<LoginResponse> {
 
   const data = (await response.json()) as LoginResponse;
   if (!data.access_token) throw new Error("El servidor no devolvió un token válido");
-  sessionStorage.setItem(TOKEN_KEY, data.access_token);
+  localStorage.setItem(TOKEN_KEY, data.access_token);
   return data;
 }
